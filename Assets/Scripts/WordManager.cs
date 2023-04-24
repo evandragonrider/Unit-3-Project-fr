@@ -19,7 +19,7 @@ public class WordManager : MonoBehaviour
     public WordDisplay AddWord()
     {
         string newWord = WordGenerator.GetRandomWord();
-        WordDisplay wordDisplay = wordSpawner.SpawnWordEnemy();
+        WordDisplay wordDisplay = wordSpawner.SpawnWordEnemies();
         wordDisplay.SetWord(newWord);
 
         Word word = new Word(newWord, wordDisplay);

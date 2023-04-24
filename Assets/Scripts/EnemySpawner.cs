@@ -1,43 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject wordPrefab;
-    public Transform wordCanvas;
-    public GameObject enemy1Prefab;
-    public float spawnInterval = 3.5f;
+    public GameObject enemyPrefab;
+    public float spawnDelay = 1f;
+    public Transform[] spawnPoints;
 
-    private Vector3[] spawnPositions = { new Vector3(8.5f, -0.5f), new Vector3(8.5f, -1.5f), new Vector3(8.5f, -3.0f) };
+    private WordGenerator wordGenerator;
+    private WordManager wordManager;
 
     private void Start()
     {
-        StartCoroutine(SpawnWordEnemyRoutine());
+        wordGenerator = FindObjectOfType<WordGenerator>();
+        wordManager = FindObjectOfType<WordManager>();
+
+        StartCoroutine(SpawnWordEnemies());
     }
 
-    private IEnumerator SpawnWordEnemyRoutine()
+    public IEnumerator SpawnWordEnemies()
     {
-        while (true)
-        {
-            SpawnWordEnemy();
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-
-    public WordDisplay SpawnWordEnemy()
+          while (true)
     {
-        Vector3 randomPosition = spawnPositions[Random.Range(0, spawnPositions.Length)];
+        // Get a random spawn point
+        Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-        GameObject parentEnemyObj = new GameObject("WordEnemyParent");
-        GameObject wordObj = Instantiate(wordPrefab, randomPosition, Quaternion.identity, wordCanvas);
-        WordDisplay wordDisplay = wordObj.GetComponent<WordDisplay>();
+        // Instantiate the enemy prefab at the random spawn point
+        GameObject enemy = Instantiate(enemyPrefab, randomSpawnPoint.position, Quaternion.identity);
 
-        GameObject enemyObj = Instantiate(enemy1Prefab, parentEnemyObj.transform);
-        Vector3 enemyOffset = new Vector3(0f, 0.5f, 0f); // adjust the offset as needed
-        enemyObj.transform.position = randomPosition + enemyOffset;
+        // Find the Text component on the enemy prefab
+        Text enemyText = enemy.GetComponentInChildren<Text>();
 
-        wordDisplay.SetEnemy(enemyObj);
-        return wordDisplay;
+        // Create a new instance of the Word class
+        Word newWord = new Word(WordGenerator.GetRandomWord(), new WordDisplay { text = enemyText });
+
+        // Add the new Word instance to the WordManager's activeWords list
+        wordManager.AddWord(newWord);
+
+        // Wait for the specified spawn delay before spawning the next enemy
+        yield return new WaitForSeconds(spawnDelay);
     }
+}
+
+
+
+
+
+
 }
