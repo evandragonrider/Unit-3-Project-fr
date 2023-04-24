@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 90ab1cb2fa163814ebf57246dd5034b3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - wordPrefab: {instanceID: 0}
+  - wordCanvas: {instanceID: 0}
+  - enemy1preFab: {fileID: 8105837837210415309, guid: c6afea58cc38dfc469485b70a956a31c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
